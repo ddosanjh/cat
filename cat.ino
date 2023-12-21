@@ -1,4 +1,5 @@
 #include "drive.h"
+#include "command.h"
 
 void setup() {
     Drive::setup();
