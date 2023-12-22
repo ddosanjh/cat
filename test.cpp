@@ -1,6 +1,10 @@
 #include <stdio.h>
 #include "command.h"
 
+/*
+
+comment out after to avoid breaking Arduino compile 
+
 int main() {
 
     int btns[5] = {BTN_ONE, BTN_TWO, BTN_THREE, BTN_FOUR, BTN_FIVE};
@@ -14,3 +18,4 @@ int main() {
 
     return 0;
 }
+*/

@@ -31,6 +31,8 @@ NOTES:
 #define BTN_POUND 0x42
 #define BTN_ASTERISK 0x4A
 
+const int DRIVE_FORWARD = BTN_UP; 
+
 namespace Command {
 
   const int
@@ -41,6 +43,7 @@ namespace Command {
     CMD_LEFT = BTN_LEFT,
     CMD_RIGHT = BTN_RIGHT;
 
+  void setup();
   int dequeue();
   void ready();
   void provideTestInput(int * btns, int n);

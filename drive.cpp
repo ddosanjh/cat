@@ -1,69 +1,72 @@
 #include "Arduino.h" 
-#include <L298NX2.h>
+#include <L298N.h>
 #include "drive.h"
 
-/*
-
-NOTES
-
- -- ground pin on arduino must tie to motor power source negative terminal
-
-*/
-
 /**
- * EN (enable) pins, which enable speed control via PWM,
- * must utilize PWM capable pins.
- *
  * On UNO PWM output is possible on digital I/O pins 
- * 3, 5, 6, 9, 10 and 11 (via analogWrite call to set duty cycle).
- *
- * IN (input) pins, control motor activation and direction,
- * can use any digital pins.
- *
+ * 3, 5, 6, 9, 10 and 11.
  */
 
- // FRONT MOTORS
-const int FRONT_EN_A = 3;
-const int FRONT_IN1_A = 2;
-const int FRONT_IN2_A = 4;
-const int FRONT_IN3_B = 6;
-const int FRONT_IN4_B = 7;
-const int FRONT_EN_B = 5;
+const unsigned int FRONT_LEFT_EN = 3;
+const unsigned int FRONT_LEFT_IN1 = 2;
+const unsigned int FRONT_LEFT_IN2 = 4;
 
-// REAR MOTORS
-const int REAR_EN_A = 9;
-const int REAR_IN1_A = 8;
-const int REAR_IN2_A = 10;
-const int REAR_IN3_B = 12;
-const int REAR_IN4_B = 13;
-const int REAR_EN_B = 11;
+const unsigned int FRONT_RIGHT_IN3 = 7; /* switched to match direction */
+const unsigned int FRONT_RIGHT_IN4 = 6; /* switched to match direction */
+const unsigned int FRONT_RIGHT_EN = 5;
 
-L298NX2 frontMotors(
-  FRONT_EN_A, 
-  FRONT_IN1_A, 
-  FRONT_IN2_A, 
-  FRONT_EN_B, 
-  FRONT_IN3_B, 
-  FRONT_IN4_B
-);
+const unsigned int REAR_LEFT_EN = 9;
+const unsigned int REAR_LEFT_IN1 = 8;
+const unsigned int REAR_LEFT_IN2 = 10;
 
-L298NX2 rearMotors(
-  FRONT_EN_A, 
-  FRONT_IN1_A, 
-  FRONT_IN2_A, 
-  FRONT_EN_B, 
-  FRONT_IN3_B, 
-  FRONT_IN4_B
-);
+const unsigned int REAR_RIGHT_IN3 = 13; /* switched to match direction */
+const unsigned int REAR_RIGHT_IN4 = 12; /* switched to match direction */
+const unsigned int REAR_RIGHT_EN = 11;
 
-void Drive::setup()
-{
-  Serial.begin(9600);
-  frontMotors.setSpeed(80);
+L298N motors[] = {
+  L298N(FRONT_LEFT_EN, FRONT_LEFT_IN1, FRONT_LEFT_IN2),
+  L298N(FRONT_RIGHT_EN, FRONT_RIGHT_IN3, FRONT_RIGHT_IN4),
+  L298N(REAR_LEFT_EN, REAR_LEFT_IN1, REAR_LEFT_IN2),
+  L298N(REAR_RIGHT_EN, REAR_RIGHT_IN3, REAR_RIGHT_IN4)
+};
+
+
+void Drive::setup() {
+    for (int motor = FRONT_LEFT; motor <= REAR_RIGHT; motor++) {
+      motors[motor].setSpeed(SPEED_MAX);
+    }
 }
 
-void Drive::forward() {
-  frontMotors.forward();
-  Serial.println("forward we go");
+void Drive::forward(int durationMs){
+
+  for (int motor = FRONT_LEFT; motor <= REAR_RIGHT; motor++) {
+    motors[motor].forward();
+  }
+
+  delay(durationMs);
+
+  for (int motor = FRONT_LEFT; motor <= REAR_RIGHT; motor++) {
+    motors[motor].stop();
+  }
+
 }
 
+void Drive::reverse(int durationMs){
+
+  for (int motor = FRONT_LEFT; motor <= REAR_RIGHT; motor++) {
+    motors[motor].backward();
+  }
+
+  delay(durationMs);
+
+  for (int motor = FRONT_LEFT; motor <= REAR_RIGHT; motor++) {
+    motors[motor].stop();
+  }
+
+}
+
+void Drive::right() {
+  motors[FRONT_LEFT].forward();
+  motors[REAR_LEFT].forward();
+  delay(3000);
+}
