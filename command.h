@@ -31,18 +31,12 @@ NOTES:
 #define BTN_POUND 0x42
 #define BTN_ASTERISK 0x4A
 
-const int DRIVE_FORWARD = BTN_UP; 
+const int DRIVE_FORWARD = BTN_UP;
+const int DRIVE_REVERSE = BTN_DOWN;
+const int DRIVE_RIGHT = BTN_RIGHT;
+const int DRIVE_LEFT = BTN_LEFT;
 
 namespace Command {
-
-  const int
-    CMD_SOUND_MEOW = 1110,
-    CMD_DRIVE_CIRCLE = 2220,
-    CMD_FORWARD = BTN_UP,
-    CMD_BACK = BTN_DOWN,
-    CMD_LEFT = BTN_LEFT,
-    CMD_RIGHT = BTN_RIGHT;
-
   void setup();
   int dequeue();
   void ready();
